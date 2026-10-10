@@ -6,6 +6,7 @@ from inline_markdown import (
     extract_markdown_links,
     split_nodes_image,
     split_nodes_link,
+    text_to_textnodes,
 )
 from textnode import TextNode, TextType
 
@@ -271,6 +272,62 @@ class TestSplitImagesAndLinks(unittest.TestCase):
             ],
             nodes,
         )
+
+class TestTextToTextNodes(unittest.TestCase):
+    def test_all_types(self):
+        text = (
+            "This is **text** with an _italic_ word and a `code block` and an "
+            "![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        )
+        self.assertListEqual(
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.TEXT),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ],
+            text_to_textnodes(text),
+        )
+
+    def test_plain_text(self):
+        self.assertListEqual(
+            [TextNode("just plain text", TextType.TEXT)],
+            text_to_textnodes("just plain text"),
+        )
+
+    def test_only_bold(self):
+        self.assertListEqual(
+            [TextNode("bold", TextType.BOLD)],
+            text_to_textnodes("**bold**"),
+        )
+
+    def test_underscore_in_url_not_italic(self):
+        self.assertListEqual(
+            [
+                TextNode("see ", TextType.TEXT),
+                TextNode("file", TextType.LINK, "https://a.com/my_file_name"),
+            ],
+            text_to_textnodes("see [file](https://a.com/my_file_name)"),
+        )
+
+    def test_markdown_inside_code_stays_literal(self):
+        self.assertListEqual(
+            [
+                TextNode("use ", TextType.TEXT),
+                TextNode("**stars**", TextType.CODE),
+            ],
+            text_to_textnodes("use `**stars**`"),
+        )
+
+    def test_unmatched_raises(self):
+        with self.assertRaises(ValueError):
+            text_to_textnodes("this **is broken")
 
 if __name__ == "__main__":
     unittest.main()
