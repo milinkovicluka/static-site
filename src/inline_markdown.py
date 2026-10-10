@@ -35,3 +35,56 @@ def extract_markdown_images(text):
 def extract_markdown_links(text):
     pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
     return re.findall(pattern, text)
+
+def split_nodes_image(old_nodes):
+    new_nodes = []
+    for old_node in old_nodes:
+        if old_node.text_type != TextType.TEXT:
+            new_nodes.append(old_node)
+            continue
+
+        remaining = old_node.text
+        images = extract_markdown_images(remaining)
+        if not images:
+            new_nodes.append(old_node)
+            continue
+
+        for alt, url in images:
+            sections = remaining.split(f"![{alt}]({url})", 1)
+            if len(sections) != 2:
+                raise ValueError("invalid markdown: image section not closed")
+            if sections[0] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            new_nodes.append(TextNode(alt, TextType.IMAGE, url))
+            remaining = sections[1]
+
+        if remaining != "":
+            new_nodes.append(TextNode(remaining, TextType.TEXT))
+    return new_nodes
+
+
+def split_nodes_link(old_nodes):
+    new_nodes = []
+    for old_node in old_nodes:
+        if old_node.text_type != TextType.TEXT:
+            new_nodes.append(old_node)
+            continue
+
+        remaining = old_node.text
+        links = extract_markdown_links(remaining)
+        if not links:
+            new_nodes.append(old_node)
+            continue
+
+        for anchor, url in links:
+            sections = remaining.split(f"[{anchor}]({url})", 1)
+            if len(sections) != 2:
+                raise ValueError("invalid markdown: link section not closed")
+            if sections[0] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            new_nodes.append(TextNode(anchor, TextType.LINK, url))
+            remaining = sections[1]
+
+        if remaining != "":
+            new_nodes.append(TextNode(remaining, TextType.TEXT))
+    return new_nodes
