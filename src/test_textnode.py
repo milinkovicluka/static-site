@@ -1,40 +1,54 @@
 import unittest
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, text_node_to_html_node
 
+class TestTextNodeToHTMLNode(unittest.TestCase):
+    def test_text(self):
+        node = TextNode("This is a text node", TextType.TEXT)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, None)
+        self.assertEqual(html_node.value, "This is a text node")
 
-class TestTextNode(unittest.TestCase):
-    def test_eq(self):
-        node = TextNode("This is a text node", TextType.BOLD)
-        node2 = TextNode("This is a text node", TextType.BOLD)
-        self.assertEqual(node, node2)
+    def test_bold(self):
+        node = TextNode("Bold", TextType.BOLD)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "b")
+        self.assertEqual(html_node.value, "Bold")
+        self.assertEqual(html_node.to_html(), "<b>Bold</b>")
 
-    def test_eq_with_url(self):
-        node = TextNode("link", TextType.LINK, "https://www.boot.dev")
-        node2 = TextNode("link", TextType.LINK, "https://www.boot.dev")
-        self.assertEqual(node, node2)
+    def test_italic(self):
+        node = TextNode("Italic", TextType.ITALIC)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.to_html(), "<i>Italic</i>")
 
-    def test_url_defaults_to_none(self):
-        node = TextNode("text", TextType.TEXT)
-        self.assertIsNone(node.url)
+    def test_code(self):
+        node = TextNode("print('hi')", TextType.CODE)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.to_html(), "<code>print('hi')</code>")
 
-    def test_not_eq_different_text(self):
-        node = TextNode("hello", TextType.BOLD)
-        node2 = TextNode("goodbye", TextType.BOLD)
-        self.assertNotEqual(node, node2)
+    def test_link(self):
+        node = TextNode("Boot.dev", TextType.LINK, "https://www.boot.dev")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "a")
+        self.assertEqual(html_node.value, "Boot.dev")
+        self.assertEqual(html_node.props, {"href": "https://www.boot.dev"})
+        self.assertEqual(
+            html_node.to_html(), '<a href="https://www.boot.dev">Boot.dev</a>'
+        )
 
-    def test_not_eq_different_text_type(self):
-        node = TextNode("same text", TextType.BOLD)
-        node2 = TextNode("same text", TextType.ITALIC)
-        self.assertNotEqual(node, node2)
+    def test_image(self):
+        node = TextNode("A cute cat", TextType.IMAGE, "https://example.com/cat.png")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "img")
+        self.assertEqual(html_node.value, "")
+        self.assertEqual(
+            html_node.props,
+            {"src": "https://example.com/cat.png", "alt": "A cute cat"},
+        )
 
-    def test_not_eq_url_vs_none(self):
-        node = TextNode("link", TextType.LINK, "https://www.boot.dev")
-        node2 = TextNode("link", TextType.LINK)
-        self.assertNotEqual(node, node2)
-
-    def test_repr(self):
-        node = TextNode("anchor", TextType.LINK, "https://www.boot.dev")
-        self.assertEqual(repr(node), "TextNode(anchor, link, https://www.boot.dev)")
+    def test_invalid_type_raises(self):
+        node = TextNode("oops", "not-a-real-type")
+        with self.assertRaises(ValueError):
+            text_node_to_html_node(node)
 
     
 if __name__ == "__main__":
