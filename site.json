@@ -1,0 +1,8 @@
+{
+  "name": "Tolkien Fan Club",
+  "lang": "en",
+  "nav": [
+    { "label": "Home", "url": "/" },
+    { "label": "Contact", "url": "/contact" }
+  ]
+}

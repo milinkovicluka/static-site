@@ -3,11 +3,12 @@ import shutil
 import sys
 
 from copystatic import copy_files_recursive
-from gencontent import generate_pages_recursive
+from gencontent import generate_pages_recursive, load_config
 
 dir_path_static = "./static"
 dir_path_content = "./content"
 template_path = "./template.html"
+config_path = "./site.json"
 
 
 def main():
@@ -23,7 +24,10 @@ def main():
     copy_files_recursive(dir_path_static, dir_path_public)
 
     print("Generating content...")
-    generate_pages_recursive(dir_path_content, template_path, dir_path_public, basepath)
+    config = load_config(config_path)
+    generate_pages_recursive(
+        dir_path_content, template_path, dir_path_public, basepath, config
+    )
 
 
 if __name__ == "__main__":

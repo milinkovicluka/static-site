@@ -28,6 +28,19 @@ Ob vsakem pushu na `main` GitHub Actions (`.github/workflows/deploy.yml`) požen
 teste, zgradi stran in jo objavi na GitHub Pages. Mapi `docs/` in `public/` nista
 v repozitoriju, ker se ustvarita pri gradnji.
 
+## Uporaba kot predloga za novo stran
+
+1. Na GitHubu: Settings → obkljukaj **Template repository**, nato **Use this template → Create a new repository**.
+2. Kloniraj novi repozitorij in zamenjaj samo:
+   - `site.json` – ime strani, jezik in meni (`nav`),
+   - `content/` – tvoje strani (vsaka mapa z `index.md`, ki ima naslov `# ...`),
+   - `static/` – slike in `index.css` za videz,
+   - po želji `template.html` (glava, noga) in ta `README.md`.
+3. V Settings → Pages → Source izberi **GitHub Actions**, nato `git push`.
+
+Basepath (`/ime-repozitorija/`) se nastavi sam iz imena repozitorija, za
+`uporabnik.github.io` je `/`. Ročni preklic: `BASEPATH="/xyz/" ./build.sh`.
+
 ## Podprt Markdown
 
 Naslovi (`#`–`######`), odstavki, **krepko**, _ležeče_, `koda`, kodni bloki,
