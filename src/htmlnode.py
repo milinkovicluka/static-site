@@ -1,3 +1,10 @@
+from html import escape
+
+# Prazni (void) HTML elementi nimajo vsebine in zaključne oznake.
+VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input",
+             "link", "meta", "source", "track", "wbr"}
+
+
 class HTMLNode():
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
@@ -11,7 +18,10 @@ class HTMLNode():
     def props_to_html(self):
         if not self.props:
             return ""
-        return "".join(f' {key}="{value}"' for key, value in self.props.items())
+        return "".join(
+            f' {key}="{escape(str(value), quote=True)}"'
+            for key, value in self.props.items()
+        )
 
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, {self.props})"
@@ -23,9 +33,12 @@ class LeafNode(HTMLNode):
     def to_html(self):
         if self.value is None:
             raise ValueError("invalid HTML: no value")
+        text = escape(self.value, quote=False)
         if self.tag is None:
-            return self.value
-        return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+            return text
+        if self.tag in VOID_TAGS:
+            return f"<{self.tag}{self.props_to_html()}>"
+        return f"<{self.tag}{self.props_to_html()}>{text}</{self.tag}>"
 
     def __repr__(self):
         return f"LeafNode({self.tag}, {self.value}, {self.props})"

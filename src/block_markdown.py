@@ -15,14 +15,23 @@ class BlockType(Enum):
 
 
 def markdown_to_blocks(markdown):
-    blocks = markdown.split("\n\n")
-    filtered_blocks = []
-    for block in blocks:
-        block = block.strip()
-        if block == "":
+    # Bloke ločujejo prazne vrstice, razen znotraj kodnega bloka (```),
+    # kjer prazne vrstice ostanejo del kode.
+    blocks = []
+    current = []
+    in_code = False
+    for line in markdown.split("\n"):
+        if line.strip().startswith("```"):
+            in_code = not in_code
+        if line.strip() == "" and not in_code:
+            if current:
+                blocks.append("\n".join(current).strip())
+                current = []
             continue
-        filtered_blocks.append(block)
-    return filtered_blocks
+        current.append(line)
+    if current:
+        blocks.append("\n".join(current).strip())
+    return [block for block in blocks if block != ""]
 
 
 def block_to_block_type(block):
@@ -102,14 +111,22 @@ def code_to_html_node(block):
 
 
 def quote_to_html_node(block):
-    lines = block.split("\n")
-    new_lines = []
-    for line in lines:
+    # Prazna vrstica ">" loči odstavke znotraj citata.
+    paragraphs = [[]]
+    for line in block.split("\n"):
         if not line.startswith(">"):
             raise ValueError("invalid quote block")
-        new_lines.append(line.lstrip(">").strip())
-    content = " ".join(new_lines)
-    return ParentNode("blockquote", text_to_children(content))
+        text = line[1:].strip()
+        if text == "":
+            if paragraphs[-1]:
+                paragraphs.append([])
+            continue
+        paragraphs[-1].append(text)
+    paragraphs = [" ".join(p) for p in paragraphs if p]
+    if len(paragraphs) == 1:
+        return ParentNode("blockquote", text_to_children(paragraphs[0]))
+    children = [ParentNode("p", text_to_children(p)) for p in paragraphs]
+    return ParentNode("blockquote", children)
 
 
 def ulist_to_html_node(block):

@@ -2,6 +2,7 @@ import re
 
 from textnode import TextNode, TextType
 
+ITALIC_UNDERSCORE = re.compile(r"(?<![\w_])_(?!\s)(.+?)(?<!\s)_(?![\w_])")
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -89,11 +90,31 @@ def split_nodes_link(old_nodes):
             new_nodes.append(TextNode(remaining, TextType.TEXT))
     return new_nodes
 
+
+def split_nodes_italic(old_nodes):
+    # _ležeče_ samo na mejah besed, tako da npr. moja_spremenljivka ostane nespremenjena.
+    new_nodes = []
+    for old_node in old_nodes:
+        if old_node.text_type != TextType.TEXT:
+            new_nodes.append(old_node)
+            continue
+        text = old_node.text
+        last = 0
+        for match in ITALIC_UNDERSCORE.finditer(text):
+            if match.start() > last:
+                new_nodes.append(TextNode(text[last:match.start()], TextType.TEXT))
+            new_nodes.append(TextNode(match.group(1), TextType.ITALIC))
+            last = match.end()
+        if last < len(text):
+            new_nodes.append(TextNode(text[last:], TextType.TEXT))
+    return new_nodes
+
+
 def text_to_textnodes(text):
     nodes = [TextNode(text, TextType.TEXT)]
     nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
     nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
-    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+    nodes = split_nodes_italic(nodes)
     return nodes
