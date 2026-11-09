@@ -220,5 +220,22 @@ A paragraph with a [link](https://boot.dev).
 
 
     
+class TestHTMLBlock(unittest.TestCase):
+    def test_html_block_type(self):
+        self.assertEqual(block_to_block_type('<div class="x">\n<p>a</p>\n</div>'), BlockType.HTML)
+        self.assertEqual(block_to_block_type("<!-- opomba -->"), BlockType.HTML)
+
+    def test_angle_bracket_text_is_paragraph(self):
+        self.assertEqual(block_to_block_type("< nazaj"), BlockType.PARAGRAPH)
+
+    def test_html_passes_through(self):
+        md = "# Naslov\n\n<form action=\"https://x\">\n<input name=\"a\">\n</form>\n\nBesedilo"
+        html = markdown_to_html_node(md).to_html()
+        self.assertEqual(
+            html,
+            '<div><h1>Naslov</h1><form action="https://x">\n<input name="a">\n</form><p>Besedilo</p></div>',
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

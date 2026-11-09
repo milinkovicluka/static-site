@@ -1,46 +1,43 @@
-# Tolkien Fan Club
+# Zanesljive storitve – {{ site.area }}
 
-![JRR Tolkien sitting](/images/tolkien.webp)
+<!-- opis: Kratek opis naslovne strani za Google (do ~155 znakov). Če ga izbrišeš, se uporabi description iz site.json. -->
 
-Here's the deal, **I like Tolkien**.
+<section class="hero">
+  <img src="/images/naslovna.svg" alt="Opis naslovne fotografije" width="1200" height="700">
+  <div class="hero-text">
+    <p class="hero-tagline">{{ site.tagline }}</p>
+    <p>Dva ali trije stavki o tem, komu pomagate in kaj stranka dobi. Pišite o koristi za stranko, ne o sebi.</p>
+    <p class="actions"><a class="btn" href="{{ site.cta_url }}">{{ site.cta_label }}</a> <a class="btn btn-ghost" href="/storitve">Poglej storitve</a></p>
+  </div>
+</section>
 
-> "I am in fact a Hobbit in all but size."
->
-> -- J.R.R. Tolkien
+## Zakaj mi
 
-## Blog posts
+<div class="features">
+  <div class="feature"><h3>Prva prednost</h3><p>En stavek, ki pove, zakaj je to pomembno za stranko.</p></div>
+  <div class="feature"><h3>Druga prednost</h3><p>Npr. hiter odziv, izkušnje, garancija, lokalno podjetje.</p></div>
+  <div class="feature"><h3>Tretja prednost</h3><p>Konkretno je bolje kot splošno: »odgovor v 24 urah«.</p></div>
+</div>
 
-- [Why Glorfindel is More Impressive than Legolas](/blog/glorfindel)
-- [Why Tom Bombadil Was a Mistake](/blog/tom)
-- [The Unparalleled Majesty of "The Lord of the Rings"](/blog/majesty)
+## Storitve
 
-## Reasons I like Tolkien
+<div class="gallery">
+  <figure class="card"><img src="/images/storitev-1.svg" alt="Storitev ena" width="800" height="600" loading="lazy"><figcaption><strong>Storitev ena</strong><span>od 50 €</span></figcaption></figure>
+  <figure class="card"><img src="/images/storitev-2.svg" alt="Storitev dve" width="800" height="600" loading="lazy"><figcaption><strong>Storitev dve</strong><span>od 80 €</span></figcaption></figure>
+  <figure class="card"><img src="/images/storitev-3.svg" alt="Storitev tri" width="800" height="600" loading="lazy"><figcaption><strong>Storitev tri</strong><span>po dogovoru</span></figcaption></figure>
+</div>
 
-- You can spend years studying the legendarium and still not understand its depths
-- It can be enjoyed by children and adults alike
-- Disney _didn't ruin it_ (okay, but Amazon might have)
-- It created an entirely new genre of fantasy
+[Vse storitve >](/storitve)
 
-## My favorite characters (in order)
+## Kako poteka sodelovanje
 
-1. Gandalf
-2. Bilbo
-3. Sam
-4. Glorfindel
-5. Galadriel
-6. Elrond
-7. Thorin
-8. Sauron
-9. Aragorn
+1. Pošljete povpraševanje prek obrazca, pokličete ali pišete na WhatsApp.
+2. Dogovorimo se za podrobnosti in pripravimo ponudbo.
+3. Opravimo delo v dogovorjenem roku.
 
-Here's what `elflang` looks like (the perfect coding language):
+> »Kratko mnenje zadovoljne stranke. Prava mnenja z imenom prepričajo bolj kot karkoli drugega.« – Ime Priimek
 
-```
-func main(){
-    fmt.Println("Aiya, Ambar!")
-}
-```
-
-Want to get in touch? [Contact me here](/contact).
-
-This site was generated with a custom-built [static site generator](https://www.boot.dev/courses/build-static-site-generator-python) from the course on [Boot.dev](https://www.boot.dev).
+<div class="cta">
+  <p><strong>Imate vprašanje?</strong> Odgovorimo v enem delovnem dnevu.</p>
+  <p class="actions"><a class="btn" href="{{ site.cta_url }}">{{ site.cta_label }}</a> <a class="btn btn-ghost" href="tel:{{ site.phone }}">Pokliči {{ site.phone_display }}</a></p>
+</div>

@@ -3,7 +3,7 @@ import shutil
 import sys
 
 from copystatic import copy_files_recursive
-from gencontent import generate_pages_recursive, load_config
+from gencontent import generate_pages_recursive, generate_sitemap, load_config
 
 dir_path_static = "./static"
 dir_path_content = "./content"
@@ -28,6 +28,9 @@ def main():
     generate_pages_recursive(
         dir_path_content, template_path, dir_path_public, basepath, config
     )
+
+    print("Generating sitemap.xml and robots.txt...")
+    generate_sitemap(dir_path_content, dir_path_public, config)
 
 
 if __name__ == "__main__":
