@@ -57,3 +57,17 @@ class ParentNode(HTMLNode):
 
     def __repr__(self):
         return f"ParentNode({self.tag}, children: {self.children}, {self.props})"
+
+
+class RawNode(HTMLNode):
+    """Že pripravljen HTML, ki gre na stran nespremenjen (HTML bloki v Markdownu)."""
+    def __init__(self, value):
+        super().__init__(None, value, None, None)
+
+    def to_html(self):
+        if self.value is None:
+            raise ValueError("invalid HTML: no value")
+        return self.value
+
+    def __repr__(self):
+        return f"RawNode({self.value})"

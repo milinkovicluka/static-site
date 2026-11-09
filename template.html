@@ -4,13 +4,53 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ Title }} | {{ SiteName }}</title>
+    <meta name="description" content="{{ Description }}" />
+    <meta name="theme-color" content="{{ site.theme_color }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="{{ site.locale }}" />
+    <meta property="og:site_name" content="{{ SiteName }}" />
+    <meta property="og:title" content="{{ Title }} | {{ SiteName }}" />
+    <meta property="og:description" content="{{ Description }}" />
+    <meta property="og:url" content="{{ PageUrl }}" />
+    <meta property="og:image" content="{{ site.url }}/images/deljenje.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="{{ SiteName }} – {{ site.tagline }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="{{ PageUrl }}" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link href="/index.css" rel="stylesheet" />
   </head>
 
   <body>
-    <header>
-      <nav>{{ Nav }}</nav>
+    <a class="skip-link" href="#vsebina">Preskoči na vsebino</a>
+    <header class="site-header">
+      <div class="header-row">
+        <a class="brand" href="/">{{ SiteName }}</a>
+        <a class="btn btn-header" href="{{ site.cta_url }}">{{ site.cta_label }}</a>
+      </div>
+      <nav class="site-nav" aria-label="Glavni meni">{{ Nav }}</nav>
     </header>
-    <article>{{ Content }}</article>
+
+    <main id="vsebina">
+      <article>{{ Content }}</article>
+    </main>
+
+    <footer class="site-footer">
+      <p class="footer-brand">{{ SiteName }}</p>
+      <p>{{ site.tagline }} · {{ site.area }}</p>
+      <p class="footer-links">
+        <a href="tel:{{ site.phone }}">{{ site.phone_display }}</a>
+        <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+        <a href="https://instagram.com/{{ site.instagram }}" rel="noopener">Instagram</a>
+      </p>
+      <p class="footer-legal">{{ site.company }} · {{ site.address }} · <a href="/zasebnost">Zasebnost</a></p>
+    </footer>
+
+    <nav class="mobile-bar" aria-label="Hitri kontakt">
+      <a href="tel:{{ site.phone }}">Pokliči</a>
+      <a href="https://wa.me/{{ site.whatsapp }}" rel="noopener">WhatsApp</a>
+      <a class="mobile-bar-cta" href="{{ site.cta_url }}">Povpraševanje</a>
+    </nav>
   </body>
 </html>

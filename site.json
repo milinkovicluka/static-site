@@ -1,8 +1,26 @@
 {
-  "name": "Tolkien Fan Club",
-  "lang": "en",
+  "name": "Ime podjetja",
+  "lang": "sl",
+  "locale": "sl_SI",
+  "url": "https://milinkovicluka.github.io/static-site",
+  "description": "Kratek opis podjetja za Google (do ~155 znakov): kaj delate, za koga in kje.",
+  "tagline": "Kratek slogan, ki pove, kaj delate",
+  "theme_color": "#1f5f8b",
+  "company": "Ime podjetja, Janez Novak s.p.",
+  "address": "Ulica 1, 1000 Ljubljana",
+  "area": "Ljubljana z okolico",
+  "phone": "+38600000000",
+  "phone_display": "000 000 000",
+  "whatsapp": "38600000000",
+  "email": "info@example.com",
+  "instagram": "imepodjetja",
+  "cta_label": "Pošlji povpraševanje",
+  "cta_url": "/kontakt#povprasevanje",
+  "web3forms_key": "VSTAVI-SVOJ-KLJUC",
   "nav": [
-    { "label": "Home", "url": "/" },
-    { "label": "Contact", "url": "/contact" }
+    { "label": "Domov", "url": "/" },
+    { "label": "Storitve", "url": "/storitve" },
+    { "label": "O nas", "url": "/o-nas" },
+    { "label": "Kontakt", "url": "/kontakt" }
   ]
 }

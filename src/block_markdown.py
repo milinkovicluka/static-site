@@ -1,7 +1,7 @@
 import re
 from enum import Enum
 
-from htmlnode import ParentNode
+from htmlnode import ParentNode, RawNode
 from inline_markdown import text_to_textnodes
 from textnode import TextNode, TextType, text_node_to_html_node
 
@@ -12,6 +12,7 @@ class BlockType(Enum):
     QUOTE = "quote"
     UNORDERED_LIST = "unordered_list"
     ORDERED_LIST = "ordered_list"
+    HTML = "html"
 
 
 def markdown_to_blocks(markdown):
@@ -36,6 +37,10 @@ def markdown_to_blocks(markdown):
 
 def block_to_block_type(block):
     lines = block.split("\n")
+
+    # Blok, ki se začne s HTML oznako (npr. "<div", "<form", "<!--"), gre na stran nespremenjen.
+    if re.match(r"^<[a-zA-Z!/]", block):
+        return BlockType.HTML
 
     if re.match(r"^#{1,6} ", block):
         return BlockType.HEADING
@@ -74,6 +79,8 @@ def block_to_html_node(block):
         return ulist_to_html_node(block)
     if block_type == BlockType.ORDERED_LIST:
         return olist_to_html_node(block)
+    if block_type == BlockType.HTML:
+        return RawNode(block)
     raise ValueError("invalid block type")
 
 
