@@ -82,7 +82,7 @@ class TestRenderPage(unittest.TestCase):
     def test_current_page_marked_in_nav(self):
         nav = [{"label": "Domov", "url": "/"}, {"label": "Storitve", "url": "/storitve"}]
         out = build_nav(nav, "/storitve")
-        self.assertIn('<a href="/storitve" aria-current="page">Torte</a>', out)
+        self.assertIn('<a href="/storitve" aria-current="page">Storitve</a>', out)
         self.assertIn('<a href="/">Domov</a>', out)
         self.assertIn('aria-current="page">Domov', build_nav(nav, "/"))
 
